@@ -1,6 +1,6 @@
 import ColorMutator from "@property-mutator/color-mutator";
 import {fabric} from "fabric";
-import IntegerMutator from "@property-mutator/integer-mutator";
+import IntegerMutator from "@property-mutator/number-mutator";
 import {useState} from "react";
 
 interface PathMutatorState {

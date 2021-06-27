@@ -2,7 +2,8 @@ import {useCanvas} from "@contexts/canvas-context";
 import {useEffect, useState} from "react";
 import {fabric} from "fabric";
 import {Flex} from "@chakra-ui/layout";
-import {Box, Grid, useBreakpoint} from "@chakra-ui/react";
+import {Box, Grid} from "@chakra-ui/react";
+import Image from 'next/image';
 
 interface ProductConfiguratorProps {
     hideHeading?: boolean
@@ -15,7 +16,6 @@ const ProductConfigurator = ({hideHeading}: ProductConfiguratorProps) => {
 
     const [activeColor, setActiveColor] = useState<string>('white');
     const [activePosition, setActivePosition] = useState<string>('front');
-    const breakpoint = useBreakpoint();
     useEffect(() => {
         fabric.Image.fromURL(`/bg/${activePosition}_${activeColor}.png`, (image) => {
             const scale = editor?.height / image.height;
@@ -57,9 +57,9 @@ const ProductConfigurator = ({hideHeading}: ProductConfiguratorProps) => {
                                             key={index}
                                             justifyContent={'center'}
                                             display={"flex"}>
-                                            <img alt={`${position} ${activeColor}`}
+                                            <Image width={128} height={150} alt={`${position} ${activeColor}`}
                                                  src={`/bg/${position}_${activeColor}.png`}
-                                                 style={{maxWidth: '100px'}}/>
+                                                 />
                                         </Box>
                                     )
                                 })
@@ -86,9 +86,8 @@ const ProductConfigurator = ({hideHeading}: ProductConfiguratorProps) => {
                                              cursor={'pointer'}
                                              justifyContent={'center'}
                                              display={"flex"}>
-                                            <img alt={`${activePosition} ${product}`}
-                                                 src={`/bg/${activePosition}_${product}.png`} width={100}
-                                                 style={{maxWidth: '100px'}}/>
+                                            <Image width={128} height={150} alt={`${activePosition} ${product}`}
+                                                 src={`/bg/${activePosition}_${product}.png`} />
                                         </Box>
                                     )
                                 })

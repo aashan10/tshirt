@@ -32,7 +32,6 @@ const IntegerMutator = ({object, property, min, max, step}: IntegerMutatorProps)
                     <InputGroup display={'flex'} flex={1}>
                         <InputLeftAddon padding={0}>
                             <IconButton disabled={value <= min} onClick={() => {
-
                                 const newValue = value - (step ?? 1);
                                 if(min && newValue < min) {
                                     setValue(min)

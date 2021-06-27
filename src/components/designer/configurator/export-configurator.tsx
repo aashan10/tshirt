@@ -1,9 +1,8 @@
 import {Flex} from "@chakra-ui/layout";
-import {Button, HStack, Spacer, VStack} from "@chakra-ui/react";
+import {Button, HStack} from "@chakra-ui/react";
 import React from "react";
 import {useCanvas} from "@contexts/canvas-context";
 import {fabric} from "fabric";
-
 
 interface ExportConfiguratorProps {
     hideHeading?: boolean;
@@ -51,6 +50,7 @@ const ExportConfigurator = ({hideHeading}: ExportConfiguratorProps) => {
                                 download('export_with_bg.svg', editor.toSVG());
                             }}>Export as SVG</Button>
                             <Button onClick={() => {
+                                localStorage.setItem('canvasElements', JSON.stringify(editor.toJSON()))
                                 const objects = [];
                                 editor.getObjects().map((object) => {
                                     objects.push(object);
@@ -62,10 +62,7 @@ const ExportConfigurator = ({hideHeading}: ExportConfiguratorProps) => {
                                 });
                                 newCanvas.add(group);
                                 download('export.svg', newCanvas.toSVG());
-                                // newCanvas.remove(group);
-                                newCanvas.getElement().parentElement.remove();
-                                editor.calcOffset();
-                                editor.renderAll();
+                                window.location.reload();
                             }}>
                                 Export as SVG without Background
                                 <canvas id={'exporter'} style={{display: 'none'}} />

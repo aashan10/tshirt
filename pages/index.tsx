@@ -7,7 +7,7 @@ import {
     Tab,
     TabPanels,
     TabPanel,
-    Stack, Button
+    Stack
 } from "@chakra-ui/react";
 import {
     SaveOutlineIcon,
@@ -17,18 +17,16 @@ import {
     FileTrayFullOutlineIcon
 } from "chakra-ui-ionicons";
 import Header from "@components/header";
-import React, {useEffect} from "react";
+import React from "react";
 import Shapes from "@components/designer/mobile/tabbar/shapes";
 import Object from "@components/designer/mobile/tabbar/object";
-import {CanvasProvider, useCanvas} from "@contexts/canvas-context";
+import {CanvasProvider} from "@contexts/canvas-context";
 import Canvas from "@components/designer/canvas";
 import ProductConfigurator from "@components/designer/configurator/product-configurator";
 import Products from "@components/designer/mobile/tabbar/products";
 import ShapesConfigurator from "@components/designer/configurator/shapes-configurator";
-import useSelectedObject from "../src/hooks/use-selected-object";
 import useSharedSelectedObject from "../src/hooks/use-selected-object";
 import ObjectConfigurator from "@components/designer/configurator/object-configurator";
-import editor from "../src/events/editor";
 import ExportConfigurator from "@components/designer/configurator/export-configurator";
 
 
@@ -41,7 +39,6 @@ const HomePage = () => {
         color: 'white',
         fontWeight: 'bold'
     };
-    const isEmpty = (obj) => !obj || obj === {} || obj === [];
     return (
         <>
             <CanvasProvider>
