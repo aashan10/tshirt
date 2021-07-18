@@ -1,0 +1,68 @@
+name: TShirt Wine Tests
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout to Changes
+        id: setup_checkout
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        id: setup_nodejs
+        uses: actions/setup-node@master
+
+      - name: Setup Yarn Cache
+        id: setup_yarn_cache
+        uses: c-hive/gha-yarn-cache@v1
+
+      - name: Install Dependencies
+        id: setup_dependencies
+        run: |
+          yarn install
+      - name: Test Codebase
+        id: test
+        run: |
+          yarn test --passWithNoTests
+
+
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout to Changes
+        id: build_checkout
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        id: build_nodejs
+        uses: actions/setup-node@master
+
+      - name: Setup Yarn Cache
+        id: build_yarn_cache
+        uses: c-hive/gha-yarn-cache@v1
+
+      - name: Install Dependencies
+        id: build_dependencies
+        run: |
+                yarn install
+
+      - name: Bundle Release
+        id: build_release
+        run: |
+                yarn build && zip -r release.zip .
+
+
+
+      - name: Upload Built Artifact
+        id: upload_bundle
+        uses: actions/upload-artifact@v2
+        with:
+          name: release.zip
+          path: ./release.zip
