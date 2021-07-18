@@ -26,10 +26,6 @@ jobs:
         id: setup_dependencies
         run: |
           yarn install
-      - name: Test Codebase
-        id: test
-        run: |
-          yarn test --passWithNoTests
 
 
   build:
