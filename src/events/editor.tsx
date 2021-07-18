@@ -6,12 +6,13 @@ import theme from "@themes/theme";
 
 class EventManager {
     protected _clipboard;
-    constructor(protected canvas: fabric.Canvas, protected context: Partial<CanvasState>, protected setIndex: CallableFunction) {
+
+    constructor(protected canvas: fabric.Canvas, protected context: Partial<CanvasState>, protected setIndex: CallableFunction, protected files: { uploadedFiles: Array<any>, setUploadedFiles: CallableFunction }) {
         this.registerEvents();
     }
 
-    public static register(canvas: fabric.Canvas, canvasContext: Partial<CanvasState>, setIndex: CallableFunction) {
-        return new EventManager(canvas, canvasContext, setIndex);
+    public static register(canvas: fabric.Canvas, canvasContext: Partial<CanvasState>, setIndex: CallableFunction, files: { uploadedFiles: Array<any>, setUploadedFiles: CallableFunction }) {
+        return new EventManager(canvas, canvasContext, setIndex, files);
     }
 
     protected copy() {
@@ -113,11 +114,11 @@ class EventManager {
                 this.copy();
             }
 
-            if(event.key === 'x' && event.ctrlKey) {
+            if (event.key === 'x' && event.ctrlKey) {
                 this.cut();
             }
 
-            if(event.key === 'v' && event.ctrlKey) {
+            if (event.key === 'v' && event.ctrlKey) {
                 this.paste();
             }
 

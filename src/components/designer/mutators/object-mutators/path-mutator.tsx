@@ -1,7 +1,8 @@
 import ColorMutator from "@property-mutator/color-mutator";
 import {fabric} from "fabric";
-import IntegerMutator from "@property-mutator/number-mutator";
+import NumberMutator from "@property-mutator/number-mutator";
 import {useState} from "react";
+import ShadowMutator from "@property-mutator/shadow-mutator";
 
 interface PathMutatorState {
     path: fabric.Path
@@ -15,14 +16,15 @@ const PathMutator = ({path}: PathMutatorState) => {
         <>
             <ColorMutator object={path} property={'fill'} initialValue={defaultColor}/>
             <ColorMutator object={path} property={'stroke'} initialValue={defaultColor}/>
-            <IntegerMutator object={path} property={'width'}/>
-            <IntegerMutator object={path} property={'height'}/>
-            <IntegerMutator object={path} property={'top'}/>
-            <IntegerMutator object={path} property={'left'}/>
-            <IntegerMutator object={path} property={'scaleX'}/>
-            <IntegerMutator object={path} property={'scaleY'}/>
-            <IntegerMutator object={path} property={'strokeWidth'}/>
-            <IntegerMutator object={path} property={'opacity'} min={0} max={1} step={0.1}/>
+            <NumberMutator object={path} property={'width'}/>
+            <NumberMutator object={path} property={'height'}/>
+            <NumberMutator object={path} property={'top'}/>
+            <NumberMutator object={path} property={'left'}/>
+            <NumberMutator object={path} property={'scaleX'}/>
+            <NumberMutator object={path} property={'scaleY'}/>
+            <NumberMutator object={path} property={'strokeWidth'}/>
+            <NumberMutator object={path} property={'opacity'} min={0} max={1} step={0.1}/>
+            <ShadowMutator object={path} />
         </>
     )
 }

@@ -6,6 +6,7 @@ import EventManager from "../../events/editor";
 import useSharedSelectedObject from "../../hooks/use-selected-object";
 import {Box, Button} from "@chakra-ui/react";
 import useDrawingMode from 'src/hooks/use-drawing-mode';
+import useUploadedFiles from "@hooks/use-uploaded-files";
 
 
 
@@ -21,6 +22,7 @@ const Canvas = ({ id }: CanvasProps): React.ReactElement => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const [index, setIndex] = useSharedSelectedObject();
     const [drawingMode, setDrawingMode] = useDrawingMode();
+    const files = useUploadedFiles();
     const callback = useCallback((node) => {
         const change = () => {
             if (node) {
@@ -51,7 +53,7 @@ const Canvas = ({ id }: CanvasProps): React.ReactElement => {
                     editor.renderAll();
                 });
             }
-            EventManager.register(editor, canvasCtx, setIndex);
+            EventManager.register(editor, canvasCtx, setIndex, files);
         }
         editor?.renderAll()
     }, [editor, height, id, setEditor, width])

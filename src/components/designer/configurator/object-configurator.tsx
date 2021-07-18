@@ -9,6 +9,7 @@ import {useCanvas} from "@contexts/canvas-context";
 import CircleMutator from "@object-mutator/circle-mutator";
 import PolygonMutator from "@object-mutator/polygon-mutator";
 import PathMutator from "@object-mutator/path-mutator";
+import TextMutator from "@object-mutator/text-mutator";
 
 
 interface ObjectConfiguratorProps {
@@ -49,6 +50,13 @@ const ObjectConfigurator = ({hideHeading}: ObjectConfiguratorProps) => {
                 return (
                     // @ts-ignore
                     <PathMutator path={object} />
+                )
+
+            case 'text':
+            case 'i-text':
+                return (
+                    // @ts-ignore
+                    <TextMutator text={object} />
                 )
             default:
                 return <></>

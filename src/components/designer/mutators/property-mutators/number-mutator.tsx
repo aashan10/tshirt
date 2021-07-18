@@ -5,22 +5,27 @@ import {useEffect, useState} from "react";
 import {useCanvas} from "@contexts/canvas-context";
 import {AddIcon, RemoveIcon} from "chakra-ui-ionicons";
 
-interface IntegerMutatorProps {
+interface NumberMutatorProps {
     object: fabric.Object,
-    property: keyof fabric.Object | keyof fabric.Circle,
+    property?: keyof fabric.Object | any,
     min?: number,
     max?: number,
-    step?: number
+    step?: number,
+    onChange?: CallableFunction,
+    initialValue?: number
 }
 
-const IntegerMutator = ({object, property, min, max, step}: IntegerMutatorProps) => {
-    // @ts-ignore
-    const [value, setValue] = useState<number>(object[property])
+const NumberMutator = ({object, property, min, max, step, onChange, initialValue}: NumberMutatorProps) => {
+    const [value, setValue] = useState<number>(object[property] ?? initialValue)
     const {editor} = useCanvas();
+
     useEffect(() => {
         // @ts-ignore
         object.set(property, value);
         editor.renderAll();
+        if (onChange) {
+            onChange(value);
+        }
     }, [value]);
 
     return (
@@ -33,14 +38,14 @@ const IntegerMutator = ({object, property, min, max, step}: IntegerMutatorProps)
                         <InputLeftAddon padding={0}>
                             <IconButton disabled={value <= min} onClick={() => {
                                 const newValue = value - (step ?? 1);
-                                if(min && newValue < min) {
+                                if (min && newValue < min) {
                                     setValue(min)
                                 } else {
                                     setValue(newValue);
                                 }
                             }} aria-label={`Increment ${property}`} icon={<RemoveIcon/>}/>
                         </InputLeftAddon>
-                        <Input min={min} max={max} step={step} display={'flex'} flex={1} onInput={(event) => {
+                        <Input textAlign={'center'} min={min} max={max} step={step} display={'flex'} flex={1} onInput={(event) => {
                             if (event.currentTarget.value) {
                                 const number = parseFloat(event.currentTarget.value);
                                 if (!isNaN(number)) {
@@ -53,7 +58,7 @@ const IntegerMutator = ({object, property, min, max, step}: IntegerMutatorProps)
                         <InputRightAddon padding={0}>
                             <IconButton disabled={value >= max} onClick={() => {
                                 const newValue = value + (step ?? 1);
-                                if(max && newValue > max) {
+                                if (max && newValue > max) {
                                     setValue(max)
                                 } else {
                                     setValue(newValue);
@@ -67,4 +72,4 @@ const IntegerMutator = ({object, property, min, max, step}: IntegerMutatorProps)
     )
 }
 
-export default IntegerMutator;
+export default NumberMutator;

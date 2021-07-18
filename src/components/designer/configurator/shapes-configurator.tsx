@@ -1,5 +1,5 @@
 import {Flex} from "@chakra-ui/layout";
-import {Grid} from "@chakra-ui/react";
+import {Box, Button, Grid, Image} from "@chakra-ui/react";
 import {
     EllipseOutlineIcon,
     SquareOutlineIcon,
@@ -11,20 +11,47 @@ import {
 } from 'chakra-ui-ionicons';
 import {fabric} from "fabric";
 import {useCanvas} from "@contexts/canvas-context";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import useDrawingMode from "@hooks/use-drawing-mode";
+import {useDropzone} from "react-dropzone";
+import useUploadedFiles from "@hooks/use-uploaded-files";
 
 interface ShapesConfiguratorProps {
     hideHeading?: boolean,
     onClose?: CallableFunction
 }
 
+interface FileObject extends File {
+    object?: fabric.Image,
+    preview?: string
+}
+
 const ShapesConfigurator = ({hideHeading, onClose}: ShapesConfiguratorProps) => {
     const {editor} = useCanvas();
+    const {uploadedFiles, setUploadedFiles} = useUploadedFiles();
     const [drawingMode, setDrawingMode] = useDrawingMode();
+    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
+        onDrop: (acceptedFiles, file, event) => {
+            const droppedFiles = acceptedFiles.map(
+                (file: FileObject) => {
+                    if (!file.object) {
+                        file.object = fabric.Image.fromURL(URL.createObjectURL(file), (imageObject) => {
+                            editor.add(imageObject);
+                        })
+                    }
+                    return Object.assign(file,
+                        {
+                            preview: URL.createObjectURL(file)
+                        }
+                    )
+                }
+            )
+            setUploadedFiles([...uploadedFiles, ...droppedFiles]);
+        }
+    });
 
     useEffect(() => {
-        if(editor) {
+        if (editor) {
             editor.isDrawingMode = drawingMode;
         }
     }, [drawingMode, editor])
@@ -178,14 +205,54 @@ const ShapesConfigurator = ({hideHeading, onClose}: ShapesConfiguratorProps) => 
                                 </Flex>
                             </Flex>
                         </Grid>
-
                     </Flex>
                 </Flex>
 
-                <Flex display={hideHeading ? 'none' : 'flex'} mt={10} flex={1} paddingY={4}>
-                    <strong>Emoji</strong>
+                {/*<Flex display={hideHeading ? 'none' : 'flex'} mt={10} flex={1} paddingY={4}>*/}
+                {/*    <strong>Emoji</strong>*/}
+                {/*</Flex>*/}
+                {/*<Flex mt={6} flex={1} direction={'column'}>*/}
+                {/*</Flex>*/}
+
+                <Flex display={hideHeading ? 'none' : 'flex'} mt={10} flex={1} paddingTop={4}>
+                    <strong>Images</strong>
                 </Flex>
-                <Flex mt={6} flex={1} direction={'column'}>
+                <Flex mt={0} flex={1} direction={'column'}>
+                    <Flex cursor={'pointer'}
+                          {...getRootProps({className: 'dropzone'})}>
+                        <Flex
+                            flex={1}
+                            borderStyle={'dashed'}
+                            borderWidth={1}
+                            borderColor={'rgba(155,155,155,0.9)'}
+                            bg={'rgba(155,155,155,0.5)'}
+                            borderRadius={10}
+                            height={'100px'}
+                            justifyItems={'center'}
+                            justifyContent={'center'}>
+                            <p style={{color: 'rgba(155,155,155,0.9)'}}>
+                                Drag and drop file or click to upload!
+                            </p>
+                        </Flex>
+                        <input {...getInputProps()} hidden={true} style={{visibility: 'hidden'}}/>
+                    </Flex>
+                    <Grid templateColumns={['30% 30% 30%', '18% 18% 18% 18% 18%']} mt={4} columnGap={['5%', '2.5%']}
+                          rowGap={'1em'}>
+                        {
+                            uploadedFiles.map((file) => {
+                                return (
+                                    <Button p={8} onClick={() => {
+                                        fabric.Image.fromURL(URL.createObjectURL(file), (imageObject) => {
+                                            editor.add(imageObject);
+                                        });
+                                    }}>
+                                        <Image src={file.preview}/>
+                                    </Button>
+                                )
+                            })
+                        }
+
+                    </Grid>
                 </Flex>
             </Flex>
         </>
