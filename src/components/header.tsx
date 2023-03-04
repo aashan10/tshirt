@@ -47,8 +47,7 @@ const Header = ({maxWidth}: HeaderProps) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                 <title>Design your T-Shirt</title>
             </Head>
-            <Flex maxWidth={maxWidth ?? '1280px'}
-                  padding={3}
+            <Flex padding={3}
                   flex={1}>
                 <IconButton variant={'ghost'}
                             icon={<MenuIcon/>}
@@ -67,14 +66,6 @@ const Header = ({maxWidth}: HeaderProps) => {
                     <Stack display={['none', 'none', 'flex']}
                            spacing={2}
                            direction={'row'}>
-                        <Button display={['none', 'block', 'block']}
-                                bgColor={'orangered'}
-                                _hover={{color: 'white', bg: 'orangered'}}
-                                color={'white'}>
-                            Start Designing
-                        </Button>
-                        <Button variant={'ghost'} colorScheme={'blue'}>Signup</Button>
-                        <Button>Login</Button>
                         <IconButton aria-label={'Color Mode'}
                                     onClick={toggleColorMode}
                                     icon={colorMode === 'light' ? <MoonIcon/> : <SunnyIcon/>}/>
