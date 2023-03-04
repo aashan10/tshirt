@@ -1,6 +1,6 @@
 import { useCanvas } from '@contexts/canvas-context'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { fabric } from 'fabric'
+import {fabric} from "fabric";
 import { Flex } from '@chakra-ui/layout'
 import EventManager from "@/events/editor";
 import useSharedSelectedObject from "@hooks/use-selected-object";

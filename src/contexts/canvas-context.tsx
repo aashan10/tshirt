@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react";
-import {fabric} from 'fabric';
+import {fabric} from "fabric";
 
 interface CanvasState {
     editor: fabric.Canvas,

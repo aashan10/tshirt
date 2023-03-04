@@ -6,7 +6,7 @@ import {useCanvas} from "@contexts/canvas-context";
 
 interface ColorMutatorProps {
     object: fabric.Object,
-    property?: keyof fabric.Object | string,
+    property?: string,
     initialValue: string | fabric.Pattern | fabric.Gradient,
     onChange?: CallableFunction
 }

@@ -21,7 +21,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@themes/*": ["./src/themes/*"],
       "@object-mutator/*": ["./src/components/designer/mutators/object-mutators/*"],
-      "@property-mutator/*": ["./src/components/designer/mutators/property-mutators/*"],
+      "@property-mutator/*": ["./src/components/designer/mutators/property-mutators/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

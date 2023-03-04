@@ -1,5 +1,4 @@
-import {fabric} from "fabric";
-import {Flex} from "@chakra-ui/layout";
+import {fabric} from "fabric";import {Flex} from "@chakra-ui/layout";
 import {FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftAddon, InputRightAddon} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {useCanvas} from "@contexts/canvas-context";
