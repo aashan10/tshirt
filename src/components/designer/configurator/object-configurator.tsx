@@ -1,5 +1,5 @@
 import {Flex} from "@chakra-ui/layout";
-import {Box, Button, Grid, IconButton, useColorModeValue} from "@chakra-ui/react";
+import {Box, Button} from "@chakra-ui/react";
 import {fabric} from "fabric";
 import {
     CloseIcon
@@ -10,6 +10,7 @@ import CircleMutator from "@object-mutator/circle-mutator";
 import PolygonMutator from "@object-mutator/polygon-mutator";
 import PathMutator from "@object-mutator/path-mutator";
 import TextMutator from "@object-mutator/text-mutator";
+import ImageMutator from "../mutators/object-mutators/image-mutator";
 
 
 interface ObjectConfiguratorProps {
@@ -17,21 +18,13 @@ interface ObjectConfiguratorProps {
 }
 
 const ObjectConfigurator = ({hideHeading}: ObjectConfiguratorProps) => {
-    const [object, setObject] = useState<fabric.Object | null>(null);
     const [objects, setObjects] = useState<Array<fabric.Object> | null>(null);
     const {activeObject, editor} = useCanvas();
-    const scrollbarColor = useColorModeValue('#ccc', '#111');
     useEffect(() => {
-        console.log(activeObject);
-        
-        if (activeObject) {
-            if (activeObject instanceof Array) {
-                setObjects(activeObject)
-            } else {
-                setObject(activeObject);
-            }
+        if (editor) {
+            setObjects(editor.getActiveObjects());
         }
-    }, [activeObject]);
+    }, [editor, activeObject]);
 
     let Mutator = ({object}: { object: fabric.Object }) => {
         switch (object.type) {
@@ -59,6 +52,11 @@ const ObjectConfigurator = ({hideHeading}: ObjectConfiguratorProps) => {
                 return (
                     // @ts-ignore
                     <TextMutator text={object} />
+                )
+            case 'image':
+                return (
+                    // @ts-ignore
+                    <ImageMutator image={object} />
                 )
             default:
                 return <></>
@@ -115,7 +113,9 @@ const ObjectConfigurator = ({hideHeading}: ObjectConfiguratorProps) => {
                                             </Button>
 
                                         </Flex>
-                                        <Mutator object={obj}/>
+                                        <Flex flex={1} flexDirection={'column'} my={4}>
+                                            <Mutator object={obj}/>
+                                        </Flex>
                                     </Flex>
                                 )
                             })

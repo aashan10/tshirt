@@ -1,5 +1,5 @@
 import {Flex} from "@chakra-ui/layout";
-import {Button, HStack} from "@chakra-ui/react";
+import {Button, HStack, VStack} from "@chakra-ui/react";
 import React from "react";
 import {useCanvas} from "@contexts/canvas-context";
 import {fabric} from "fabric";
@@ -45,11 +45,11 @@ const ExportConfigurator = ({hideHeading}: ExportConfiguratorProps) => {
                       }}
                       overflowY={'scroll'} direction={'column'}>
                     <Flex direction={'column'}>
-                        <HStack spacing={'10px'} flex={1}>
-                            <Button onClick={() => {
+                        <VStack spacing={'10px'} flex={1}>
+                            <Button w={'100%'} onClick={() => {
                                 download('export_with_bg.svg', editor.toSVG());
-                            }}>Export as SVG</Button>
-                            <Button onClick={() => {
+                            }}>SVG</Button>
+                            <Button w={'100%'} onClick={() => {
                                 localStorage.setItem('canvasElements', JSON.stringify(editor.toJSON()))
                                 const objects = [];
                                 editor.getObjects().map((object) => {
@@ -61,13 +61,18 @@ const ExportConfigurator = ({hideHeading}: ExportConfiguratorProps) => {
                                     width: group.width,
                                 });
                                 newCanvas.add(group);
+                                console.log(newCanvas.toSVG());
+                                
                                 download('export.svg', newCanvas.toSVG());
                                 window.location.reload();
                             }}>
-                                Export as SVG without Background
-                                <canvas id={'exporter'} style={{display: 'none'}} />
+                                SVG without Background
+                                <canvas id={'exporter'} style={{display: 'none', visibility: 'hidden'}} />
                             </Button>
-                        </HStack>
+                            <Button w={'100%'} onClick={() => {
+                                window.dispatchEvent(new KeyboardEvent('keydown', {key: 's', ctrlKey: true}));
+                            }}>Save Locally</Button>
+                        </VStack>
                     </Flex>
                 </Flex>
             </Flex>

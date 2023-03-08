@@ -1,3 +1,8 @@
+if ! command -v yum &> /dev/null
+then
+    echo "yum could not be found"
+    exit 0
+fi
 yum install wget
 
 wget https://github.com/NixOS/patchelf/archive/refs/tags/0.17.0.tar.gz

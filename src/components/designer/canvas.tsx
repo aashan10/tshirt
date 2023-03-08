@@ -7,6 +7,7 @@ import useSharedSelectedObject from "@hooks/use-selected-object";
 import {Box, Button} from "@chakra-ui/react";
 import useDrawingMode from '@hooks/use-drawing-mode';
 import useUploadedFiles from "@hooks/use-uploaded-files";
+import { useFonts } from '@/contexts/font-context';
 
 
 
@@ -21,7 +22,7 @@ const Canvas = ({ id }: CanvasProps): React.ReactElement => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const [index, setIndex] = useSharedSelectedObject();
     const [drawingMode, setDrawingMode] = useDrawingMode();
-    
+    const {addFont} = useFonts();
     const files = useUploadedFiles();
     const callback = useCallback((node) => {
         const change = () => {
@@ -49,9 +50,16 @@ const Canvas = ({ id }: CanvasProps): React.ReactElement => {
             setEditor(editor)
             const objects = localStorage.getItem('canvasElements');
             if(objects) {
-                editor.loadFromJSON(objects, () => {
-                    editor.renderAll();
+                const data = JSON.parse(objects);
+                data.objects.filter(object => object.type === 'i-text').map(object => {
+                    addFont(object.fontFamily);
                 });
+
+                setTimeout(() => {
+                    editor.loadFromJSON(objects, () => {
+                        editor.renderAll();
+                    });
+                }, 2000);
             }
             EventManager.register(editor, {
                 editor,

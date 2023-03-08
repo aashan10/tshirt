@@ -4,6 +4,7 @@ import {fabric} from "fabric";
 import {Flex} from "@chakra-ui/layout";
 import {Box, Grid} from "@chakra-ui/react";
 import Image from 'next/image';
+import ColorMutator from "../mutators/property-mutators/color-mutator";
 
 interface ProductConfiguratorProps {
     hideHeading?: boolean
@@ -13,6 +14,18 @@ const ProductConfigurator = ({hideHeading}: ProductConfiguratorProps) => {
     const {editor} = useCanvas();
     const products = ['red', 'skyblue', 'darkgray', 'yellow', 'white', 'orange'];
     const positions = ['front', 'back'];
+
+    const [bgColor, setBgColor] = useState<string>('white');
+
+    useEffect(() => {
+        if (editor) {
+            editor.set({
+                backgroundColor: bgColor,
+            });
+            editor.setBackgroundImage(null);
+            editor.renderAll();
+        }
+    }, [bgColor, editor]);
 
     const [activeColor, setActiveColor] = useState<string>('white');
     const [activePosition, setActivePosition] = useState<string>('front');
@@ -33,7 +46,7 @@ const ProductConfigurator = ({hideHeading}: ProductConfiguratorProps) => {
         <>
             <Flex direction={'column'}>
                 <Flex display={hideHeading ? 'none' : 'flex'} flex={1} paddingY={4}>
-                    <strong>Product Options</strong>
+                    <strong>Background Options</strong>
                 </Flex>
                 <Flex mt={6} flex={1} direction={'column'}>
                     <Flex direction={'column'} flex={1}>
@@ -95,6 +108,14 @@ const ProductConfigurator = ({hideHeading}: ProductConfiguratorProps) => {
                         </Grid>
 
                     </Flex>
+                </Flex>
+
+                <Flex mt={4}>
+                    {editor && (
+                        <ColorMutator initialValue={editor.backgroundColor} property={'background'} onChange={(value) => {
+                            setBgColor(value);
+                        }}/>
+                    )}
                 </Flex>
             </Flex>
         </>

@@ -1,5 +1,5 @@
 import {Flex} from "@chakra-ui/layout";
-import {Box, Button, Grid, Image} from "@chakra-ui/react";
+import {Grid, Image} from "@chakra-ui/react";
 import {
     EllipseOutlineIcon,
     SquareOutlineIcon,
@@ -11,7 +11,7 @@ import {
 } from 'chakra-ui-ionicons';
 import {fabric} from "fabric";
 import {useCanvas} from "@contexts/canvas-context";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import useDrawingMode from "@hooks/use-drawing-mode";
 import {useDropzone} from "react-dropzone";
 import useUploadedFiles from "@hooks/use-uploaded-files";
@@ -24,14 +24,21 @@ interface ShapesConfiguratorProps {
 interface FileObject extends File {
     object?: fabric.Image,
     preview?: string
+    isSvg?: boolean
 }
 
 const ShapesConfigurator = ({hideHeading, onClose}: ShapesConfiguratorProps) => {
     const {editor} = useCanvas();
     const {uploadedFiles, setUploadedFiles} = useUploadedFiles();
     const [drawingMode, setDrawingMode] = useDrawingMode();
-    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
-        onDrop: (acceptedFiles, file, event) => {
+    const {getRootProps, getInputProps} = useDropzone({
+        accept: {
+            'image/jpg': [],
+            'image/png': [],
+            'image/jpeg': [],
+            'image/svg+xml': []
+        },
+        onDrop: (acceptedFiles) => {
             const droppedFiles = acceptedFiles.map(
                 (file: FileObject) => {
                     if (!file.object) {
@@ -242,12 +249,6 @@ const ShapesConfigurator = ({hideHeading, onClose}: ShapesConfiguratorProps) => 
                     </Flex>
                 </Flex>
 
-                {/*<Flex display={hideHeading ? 'none' : 'flex'} mt={10} flex={1} paddingY={4}>*/}
-                {/*    <strong>Emoji</strong>*/}
-                {/*</Flex>*/}
-                {/*<Flex mt={6} flex={1} direction={'column'}>*/}
-                {/*</Flex>*/}
-
                 <Flex display={hideHeading ? 'none' : 'flex'} mt={10} flex={1} paddingTop={4}>
                     <strong>Images</strong>
                 </Flex>
@@ -256,13 +257,14 @@ const ShapesConfigurator = ({hideHeading, onClose}: ShapesConfiguratorProps) => 
                           {...getRootProps({className: 'dropzone'})}>
                         <Flex
                             flex={1}
+                            my={4}
                             borderStyle={'dashed'}
                             borderWidth={1}
                             borderColor={'rgba(155,155,155,0.9)'}
                             bg={'rgba(155,155,155,0.5)'}
                             borderRadius={10}
                             height={'100px'}
-                            justifyItems={'center'}
+                            alignItems={'center'}
                             justifyContent={'center'}>
                             <p style={{color: 'rgba(155,155,155,0.9)'}}>
                                 Drag and drop file or click to upload!
@@ -275,13 +277,16 @@ const ShapesConfigurator = ({hideHeading, onClose}: ShapesConfiguratorProps) => 
                         {
                             uploadedFiles.map((file, index) => {
                                 return (
-                                    <Button key={index} p={8} onClick={() => {
+                                    <Flex title="Insert Image" cursor={'pointer'} bg={'rgba(0,0,0,0.25)'} rounded={20} key={index} p={8} onClick={() => {
                                         fabric.Image.fromURL(URL.createObjectURL(file), (imageObject) => {
+                                            if (imageObject.width > editor.width) {
+                                                imageObject.scaleToWidth(editor.width / 2);
+                                            }
                                             editor.add(imageObject);
                                         });
                                     }}>
                                         <Image src={file.preview} alt="Image"/>
-                                    </Button>
+                                    </Flex>
                                 )
                             })
                         }

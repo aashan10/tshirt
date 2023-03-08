@@ -1,5 +1,6 @@
 import React, {useContext, useState} from "react";
 import {fabric} from "fabric";
+import { FontProvider } from "./font-context";
 
 interface CanvasState {
     editor: fabric.Canvas,
@@ -20,7 +21,9 @@ const CanvasProvider = ({children} : {children: React.ReactElement}) => {
             activeObject: activeObject,
             setActiveObject: setActiveObject
         }}>
-            {children}
+            <FontProvider>
+                {children}
+            </FontProvider>
         </CanvasContext.Provider>
     )
 }

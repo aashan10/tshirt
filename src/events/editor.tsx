@@ -108,8 +108,10 @@ class EventManager {
                 localStorage.setItem('canvasElements', json);
                 toast({
                     position: 'bottom',
+                    description: 'Your art can now be continued on this device even if you close the browser!',
                     title: 'Saved',
                     status: 'success',
+                    duration: 4000,
                     isClosable: true
                 })
             }
