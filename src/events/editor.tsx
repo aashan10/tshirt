@@ -113,7 +113,8 @@ class EventManager {
                     status: 'success',
                     duration: 4000,
                     isClosable: true
-                })
+                });
+                this.canvas.renderAll();
             }
 
             if (event.key === 'c' && ctrlPressed) {

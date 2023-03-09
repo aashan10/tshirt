@@ -5,8 +5,8 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Spacer,
 } from "@chakra-ui/react";
+import theme from "@themes/theme";
 import { useEffect, useRef, useState } from "react";
 import { useCanvas } from "@contexts/canvas-context";
 import React from "react";
@@ -17,12 +17,19 @@ interface ColorMutatorProps {
   initialValue: string | fabric.Pattern | fabric.Gradient;
   onChange?: CallableFunction;
 }
+const {blackAlpha,orange, blue, purple,cyan,green,red,pink,facebook,linkedin,messenger,twitter,whatsapp, yellow} = theme.colors;
 const pallettes = [
-    ['#F2F2F2', '#E5E5E5', '#B2B2B2', '#666666', '#4D4D4D', '#000000'],
-    ['#CDF1FF', '#9BDEFF', '#6AC6FF', '#45AEFF', '#0787FF', '#034DB7'],
-    ['#FDE599', '#F9D166', '#F3BC3F', '#ec9d04', '#CA7F02', '#884C01'],
-    ['#718995', '#36454F', '#273643', '#1B2938', '#111D2D', '#0A1425'],
-
+  blackAlpha,
+  purple,
+  blue,
+  linkedin,
+  cyan,
+  green,
+  whatsapp,
+  yellow,
+  orange,
+  red,
+  pink,
 ];
 const ColorMutator = ({
   object,
@@ -47,7 +54,7 @@ const ColorMutator = ({
 
   useEffect(() => {
     if (isExpanded) {
-      setRows(pallettes.length - 1);
+      setRows(pallettes.length);
     } else {
       setRows(2);
     }
@@ -66,7 +73,8 @@ const ColorMutator = ({
             flex={1}
             textTransform={"capitalize"}
           >{`${property} Color`}</FormLabel>
-          <Flex my={4}>
+          <Flex justify={'space-between'} my={4}>
+            <Flex>
             <Button
               onClick={() => {
                 setValue("rgba(0,0,0,0)");
@@ -94,26 +102,37 @@ const ColorMutator = ({
             <Input
               type={"color"}
               ref={ref}
+              value={value}
               onChange={(e) => {
                 setValue(e.target.value);
               }}
               hidden
             />
+            </Flex>
+            <Flex my={4}>
+            <Button variant={'link'} onClick={() => {
+                  setExpanded(!isExpanded);
+              }}>{isExpanded ? 'Less' : 'More'}</Button>
+            </Flex>
           </Flex>
 
-          <Grid templateColumns={"repeat(6, 1fr)"} gap={6}>
+          <Grid w={'100%'} templateColumns={"repeat(9, 1fr)"} templateRows="auto" gap={4}>
             {pallettes.slice(0, rows).map((pallette, index) => {
               return (
                 <React.Fragment key={index}>
-                  {pallette.map((color, index) => {
+                  {Object.keys(pallette).map((key, index) => {
+                    if (key == '50') {
+                      return;
+                    }
+                    const color = pallette[key];
                     return (
                       <Button
                         onClick={() => {
                           setValue(color);
                         }}
                         key={index}
-                        borderWidth={0}
-                        borderColor={"black"}
+                        borderWidth={2}
+                        borderColor={"gray.300"}
                         color={color}
                         bg={color}
                         _hover={{ bg: color }}
@@ -125,11 +144,6 @@ const ColorMutator = ({
               );
             })}
           </Grid>
-          <Flex my={4}>
-            <Button variant={'link'} onClick={() => {
-                setExpanded(!isExpanded);
-            }}>Show {isExpanded ? 'Less' : 'More'}</Button>
-          </Flex>
         </FormControl>
       </Flex>
     </>

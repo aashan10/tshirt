@@ -41,11 +41,6 @@ const ShapesConfigurator = ({hideHeading, onClose}: ShapesConfiguratorProps) => 
         onDrop: (acceptedFiles) => {
             const droppedFiles = acceptedFiles.map(
                 (file: FileObject) => {
-                    if (!file.object) {
-                        file.object = fabric.Image.fromURL(URL.createObjectURL(file), (imageObject) => {
-                            editor.add(imageObject);
-                        })
-                    }
                     return Object.assign(file,
                         {
                             preview: URL.createObjectURL(file)
