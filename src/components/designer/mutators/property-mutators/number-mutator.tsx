@@ -17,6 +17,7 @@ interface NumberMutatorProps {
   step?: number;
   onChange?: CallableFunction;
   initialValue?: number;
+  label?: string;
 }
 
 const NumberMutator = ({
@@ -25,10 +26,12 @@ const NumberMutator = ({
   min,
   max,
   step,
+  label,
   onChange,
   initialValue,
 }: NumberMutatorProps) => {
-  const [value, setValue] = useState<number>(object[property] ?? initialValue);
+  const initializer = initialValue ?? object[property] ?? 0;
+  const [value, setValue] = useState<number>(initializer);
   const { editor } = useCanvas();
 
   useEffect(() => {
@@ -48,24 +51,26 @@ const NumberMutator = ({
           display={"flex"}
           flexDirection={"row"}
           justifyContent={"space-between"}
+          alignItems={"center"}
         >
           <FormLabel
             display={"flex"}
             flex={1}
             textTransform={"capitalize"}
-          >{`${property}`}</FormLabel>
+          >{`${label ?? property}`}</FormLabel>
           <Flex flex={1}>
             <Flex flex={3}>
               <Slider
                 min={min}
                 max={max}
+                step={step ?? 1}
                 initialValue={value}
                 onChange={(value) => {
                   setValue(value);
                 }}
               />
             </Flex>
-            <Flex flex={1} px={4}>
+            <Flex flex={1} ml={4}>
               <Input
                 value={value}
                 onChange={(v) => {
@@ -77,6 +82,7 @@ const NumberMutator = ({
           </Flex>
         </FormControl>
       </Flex>
+      <hr style={{marginTop: 10}}/>
     </>
   );
 };

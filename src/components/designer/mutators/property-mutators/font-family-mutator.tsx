@@ -96,7 +96,7 @@ const FontFamilyMutator = ({
   initialValue,
 }: FontFamilyMutatorProps) => {
   const [value, setValue] = useState<string>(
-    object["fontFamily"] ?? initialValue
+    (object["fontFamily"] ?? initialValue) ?? 'sans-serif'
   );
   const { addFont } = useFonts();
   const { editor } = useCanvas();
@@ -133,6 +133,7 @@ const FontFamilyMutator = ({
           display={"flex"}
           flexDirection={"row"}
           justifyContent={"space-between"}
+          alignItems={"center"}
         >
           <FormLabel display={"flex"} flex={1}>
             Font Family
@@ -153,6 +154,7 @@ const FontFamilyMutator = ({
           </InputGroup>
         </FormControl>
       </Flex>
+      <hr style={{marginTop: 10}}/>
     </>
   );
 };

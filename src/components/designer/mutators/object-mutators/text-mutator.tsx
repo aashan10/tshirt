@@ -4,7 +4,7 @@ import StringMutator from "@property-mutator/string-mutator";
 import ColorMutator from "@property-mutator/color-mutator";
 import NumberMutator from "@property-mutator/number-mutator";
 import FontFamilyMutator from "../property-mutators/font-family-mutator";
-import ShadowMutator from "../property-mutators/shadow-mutator";
+import ShadowMutator from "../property-mutators/groups/shadow-mutator";
 
 interface TextMutatorProps {
     text: fabric.Text | fabric.IText

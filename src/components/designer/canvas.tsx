@@ -2,7 +2,7 @@ import { useCanvas } from '@contexts/canvas-context'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {fabric} from "fabric";
 import { Flex } from '@chakra-ui/layout'
-import EventManager from "@/events/editor";
+import {EventManager} from "@/events/event-manager";
 import useSharedSelectedObject from "@hooks/use-selected-object";
 import {Box, Button} from "@chakra-ui/react";
 import useDrawingMode from '@hooks/use-drawing-mode';
@@ -48,27 +48,19 @@ const Canvas = ({ id }: CanvasProps): React.ReactElement => {
                 width: width,
             });
             setEditor(editor)
-            const objects = localStorage.getItem('canvasElements');
-            if(objects) {
-                const data = JSON.parse(objects);
-                data.objects.filter(object => object.type === 'i-text').map(object => {
-                    addFont(object.fontFamily);
-                });
 
-                setTimeout(() => {
-                    editor.loadFromJSON(objects, () => {
-                        editor.renderAll();
-                    });
-                }, 2000);
-            }
-            EventManager.register(editor, {
-                editor,
-                setEditor,
-                setActiveObject,
-                activeObject,
-            }, setIndex, files);
         }
-        editor?.renderAll()
+
+        if (editor) {
+            const manager = EventManager.getInstance({
+                canvas: editor,
+                setActiveObject: setActiveObject,
+            });
+            const unsubscribe = manager.subscribe();
+            return () => {           
+                unsubscribe();
+            }
+        }
     }, [editor])
 
     return (

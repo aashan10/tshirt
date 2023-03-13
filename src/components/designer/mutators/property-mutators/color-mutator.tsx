@@ -7,7 +7,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import theme from "@themes/theme";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCanvas } from "@contexts/canvas-context";
 import React from "react";
 
@@ -31,17 +31,33 @@ const pallettes = [
   red,
   pink,
 ];
+
+const shuffleArray = (array: Array<any>) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 const ColorMutator = ({
   object,
   property,
   onChange,
   initialValue,
 }: ColorMutatorProps) => {
-  const [value, setValue] = useState<string>(object ? object[property] : initialValue);
+  const initializer = initialValue ?? object[property];
+  const [value, setValue] = useState<string>(initializer);
   const { editor } = useCanvas();
   const [isExpanded, setExpanded] = useState(false);
   const [rows, setRows] = useState(2);
   const ref = useRef(null);
+
+  
+  const shuffledPallettes = useMemo(() => {
+    return shuffleArray(pallettes);
+  }, []);
+
+  
 
   useEffect(() => {
     // @ts-ignore
@@ -117,7 +133,7 @@ const ColorMutator = ({
           </Flex>
 
           <Grid w={'100%'} templateColumns={"repeat(9, 1fr)"} templateRows="auto" gap={4}>
-            {pallettes.slice(0, rows).map((pallette, index) => {
+            {shuffledPallettes.slice(0, rows).map((pallette, index) => {
               return (
                 <React.Fragment key={index}>
                   {Object.keys(pallette).map((key, index) => {
@@ -145,7 +161,9 @@ const ColorMutator = ({
             })}
           </Grid>
         </FormControl>
+        
       </Flex>
+      <hr style={{marginTop: 10}}/>
     </>
   );
 };

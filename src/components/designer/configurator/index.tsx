@@ -15,7 +15,7 @@ const Configurator = () => {
         <Tab>Export</Tab>
       </TabList>
 
-      <TabPanels id="configurator" overflowY={'scroll'} maxH={'80vh'}>
+      <TabPanels id="configurator" overflowY={'scroll'} maxH={'calc(100vh - 140px)'}>
         <TabPanel>
           <ProductConfigurator />
         </TabPanel>

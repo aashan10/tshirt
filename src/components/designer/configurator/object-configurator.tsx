@@ -16,7 +16,42 @@ import ImageMutator from "../mutators/object-mutators/image-mutator";
 interface ObjectConfiguratorProps {
     hideHeading?: boolean;
 }
+const Mutator = ({object}: { object: fabric.Object }) => {
+    switch (object.type) {
+        case 'circle':
+            return (
+                // @ts-ignore
+                <CircleMutator circle={object}/>
+            )
 
+        case 'rect':
+        case 'polygon':
+        case 'triangle':
+            return (
+                // @ts-ignore
+                <PolygonMutator polygon={object} />
+            )
+        case 'path':
+            return (
+                // @ts-ignore
+                <PathMutator path={object} />
+            )
+
+        case 'text':
+        case 'i-text':
+            return (
+                // @ts-ignore
+                <TextMutator text={object} />
+            )
+        case 'image':
+            return (
+                // @ts-ignore
+                <ImageMutator image={object} />
+            )
+        default:
+            return <></>
+    }
+};
 const ObjectConfigurator = ({hideHeading}: ObjectConfiguratorProps) => {
     const [objects, setObjects] = useState<Array<fabric.Object> | null>(null);
     const {activeObject, editor} = useCanvas();
@@ -25,44 +60,6 @@ const ObjectConfigurator = ({hideHeading}: ObjectConfiguratorProps) => {
             setObjects(editor.getActiveObjects());
         }
     }, [editor, activeObject]);
-
-    let Mutator = ({object}: { object: fabric.Object }) => {
-        switch (object.type) {
-            case 'circle':
-                return (
-                    // @ts-ignore
-                    <CircleMutator circle={object}/>
-                )
-
-            case 'rect':
-            case 'polygon':
-            case 'triangle':
-                return (
-                    // @ts-ignore
-                    <PolygonMutator polygon={object} />
-                )
-            case 'path':
-                return (
-                    // @ts-ignore
-                    <PathMutator path={object} />
-                )
-
-            case 'text':
-            case 'i-text':
-                return (
-                    // @ts-ignore
-                    <TextMutator text={object} />
-                )
-            case 'image':
-                return (
-                    // @ts-ignore
-                    <ImageMutator image={object} />
-                )
-            default:
-                return <></>
-        }
-    };
-
     return (
         <>
             <Flex direction={'column'}>
@@ -70,8 +67,6 @@ const ObjectConfigurator = ({hideHeading}: ObjectConfiguratorProps) => {
                     <strong>Object</strong>
                 </Flex>
                 <Flex mt={6}
-                      height={'calc(100vh - 192px)'}
-                      pb={10}
                       mb={3}
                       css={{
                           '&::-webkit-scrollbar': {

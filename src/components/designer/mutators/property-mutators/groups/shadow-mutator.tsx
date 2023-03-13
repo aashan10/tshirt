@@ -54,7 +54,6 @@ const ShadowMutator = ({object}: ShadowMutatorState) => {
                     onChange={(value: number) => {
                         setShadow(new fabric.Shadow({...shadow, blur: value}));
                     }}/>
-
                 <NumberMutator
                     step={1}
                     object={object}
@@ -63,7 +62,6 @@ const ShadowMutator = ({object}: ShadowMutatorState) => {
                     onChange={(value: number) => {
                         setShadow(new fabric.Shadow({...shadow, offsetX: value}));
                     }}/>
-
                 <NumberMutator
                     step={1}
                     object={object}
